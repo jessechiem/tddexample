@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 from lists.views import home_page  # home_page in lists/view.py
 
@@ -14,10 +15,10 @@ class HomePageTest(TestCase):
         self.assertEqual(found.func, home_page) 
 
     def test_home_page_returns_correct_html(self):
-        ''' Asserts that closing <html> tags & <title> appears
-        in HttpResponse's contents. '''
+        ''' Checks that we're render the correct template.'''
         request = HttpRequest()  # what django sees when browser asks for a page
         response = home_page(request)
-        self.assertTrue(response.content.startswith(b'<html>'))
-        self.assertIn(b'<title>To-Do Lists</title>', response.content)
-        self.assertTrue(response.content.strip().endswith(b'</html>'))
+        expected_html = render_to_string('home.html')
+        # decode() converts response.content bytes into unicode;
+        # allows us to compare strings with strings
+        self.assertEqual(response.content.decode(), expected_html)
