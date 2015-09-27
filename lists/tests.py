@@ -1,10 +1,12 @@
 from django.test import TestCase
+from django.core.urlresolvers import resolve
+from lists.views import home_page  # home_page in lists/view.py
 
 # Create your tests here.
-class SmokeTest(TestCase):
-    ''' Tests here will invoked by:
-    python manage.py test
-    '''    
-    def test_bad_maths(self):
-        ''' a deliberately failing test. '''
-        self.assertEqual(1 + 1, 3)
+class HomePageTest(TestCase):
+    
+    def test_root_url_resolves_to_home_page_view(self):
+        ''' Check that resolve, when called with '/', the root
+        of the site, finds a function called home_page. '''
+        found = resolve('/')
+        self.assertEqual(found.func, home_page) 
