@@ -6,7 +6,7 @@ class NewVisitorTest(unittest.TestCase):
     def setUp(self):
         ''' special method run before test. '''
         self.browser = webdriver.Firefox()
-        self.browser.implicity_wait(3)  # selenium waits 3 sec. for something in page appear
+        self.browser.implicitly_wait(3)  # selenium waits 3 sec. for something in page appear
 
     def tearDown(self):
         ''' special method run after test. '''
