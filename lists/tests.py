@@ -33,6 +33,11 @@ class HomePageTest(TestCase):
 
         response = home_page(request)
 
+        # check that at least 1 Item saved to database
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()  # same as objects.all()[0]
+        self.assertEqual(new_item.text, 'A new list item')
+
         self.assertIn('A new list item', response.content.decode())
         expected_html = render_to_string(
             'home.html',
