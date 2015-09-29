@@ -45,6 +45,11 @@ class HomePageTest(TestCase):
         )
         self.assertEqual(response.content.decode(), expected_html)
 
+    def test_home_page_only_saves_items_when_necessary(self):
+        request = HttpRequest()
+        home_page(request)
+        self.assertEqual(Item.objects.count(), 0)
+
 class ItemModelTest(TestCase):
     ''' new test model to create new records in database, and first
     unit test for using Django's Object-Relational Mapper (ORM). '''
