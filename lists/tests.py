@@ -26,7 +26,7 @@ class HomePageTest(TestCase):
 
     def test_home_page_can_save_a_POST_request(self):
         ''' Checks that return HTML will have new item next to it,
-        along with POST request.'''
+        along with POST request. Always redirect after a post. '''
         request = HttpRequest()
         request.method = 'POST'
         request.POST['item_text'] = 'A new list item'
@@ -38,12 +38,17 @@ class HomePageTest(TestCase):
         new_item = Item.objects.first()  # same as objects.all()[0]
         self.assertEqual(new_item.text, 'A new list item')
 
-        self.assertIn('A new list item', response.content.decode())
-        expected_html = render_to_string(
-            'home.html',
-            {'new_item_text': 'A new list item'}
-        )
-        self.assertEqual(response.content.decode(), expected_html)
+    def test_home_page_redirects_after_POST(self):
+        ''' separate unit test for checking redirect post. '''
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new list item'
+        
+        response = home_page(request)
+
+        # 302 represents a Http redirect
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
 
     def test_home_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
