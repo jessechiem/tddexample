@@ -10,7 +10,8 @@ def home_page(request):
         Item.objects.create(text=request.POST['item_text'])
         return redirect('/')
 
-    return render(request, 'home.html')
+    items = Item.objects.all()
+    return render(request, 'home.html', {'items': items})
         
     # reference: look up dict.get
     # http://docs.python.org/3/library/stdtypes.html#dict.get
