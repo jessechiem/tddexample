@@ -8,6 +8,11 @@ from lists.models import Item
 
 # Create your tests here.
 class HomePageTest(TestCase):
+    ''' From TDD p 77: When we run unit tests (NOT functional tests),
+    Django test runner automatically creates a brand new test database
+    (separate from the real one), which it can safely reset before each
+    individual test is run, and then throw away at the end. But our
+    functional tests currently run against the 'real' database, db.sqlite3 '''
     
     def test_root_url_resolves_to_home_page_view(self):
         ''' Check that resolve, when called with '/', the root
