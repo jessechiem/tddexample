@@ -1,8 +1,9 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys  # send special keys (ex. ENTER, CTRL modifiers)
 import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         ''' special method run before test. '''
@@ -24,7 +25,7 @@ class NewVisitorTest(unittest.TestCase):
         ''' this is where main body of the test is. '''
         # Edith has heard about a cool new oneline to-do app.
         # She goes to check out its homepage.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She notices page title
         self.assertIn('To-Do', self.browser.title)
@@ -69,5 +70,7 @@ class NewVisitorTest(unittest.TestCase):
         
         # She visits that URL - her to-do list is still there.
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')  # supresses superfluous ResourceWarning
+#if __name__ == '__main__':
+#    unittest.main(warnings='ignore')  # supresses superfluous ResourceWarning
+
+# now we can run with: python manage.py test functional_tests
