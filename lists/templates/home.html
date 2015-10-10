@@ -3,18 +3,13 @@
         <title>To-Do Lists</title>
     </head>
     <body>
-        <h1>Your To-Do List</h1>
-        <form method="POST">
+        <h1>Start a new To-Do list</h1>
+        <form method="POST" action="/">
             <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
             {% csrf_token %}
         </form>
-        <table id="id_list_table">
-            <!-- Just changing the template won't do; pass these items
-            to it from the home page view:
-            return render(request, 'home.html', {'items': items})-->
-            {% for item in items %}
-                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
-            {% endfor %}
-        </table>
-    </body
+        <!-- Since we have list.html, we can remove a few lines here;
+        the home page doesn't need to list items, it only needs the
+        new list input field. -->
+    </body>
 </html>

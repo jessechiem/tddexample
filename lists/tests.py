@@ -60,16 +60,6 @@ class HomePageTest(TestCase):
         home_page(request)
         self.assertEqual(Item.objects.count(), 0)
 
-    def test_home_page_displays_all_list_items(self):
-        ''' Checks that home page template can display multiple list items. '''
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
-
-        request = HttpRequest()
-        response = home_page(request)
-
-        self.assertIn('itemey 1', response.content.decode())
-        self.assertIn('itemey 2', response.content.decode())
 
 class ItemModelTest(TestCase):
     ''' new test model to create new records in database, and first
@@ -98,6 +88,12 @@ class ListViewTest(TestCase):
     ''' Django Test Client for testing views, templates, and URLs
     working together; i.e checking URL resolution explicitly, view
     functions, and views rendering templates correctly. '''
+    def test_uses_list_template(self):
+        ''' Check to see if view is using the different template,
+        after view_list in views.py is updated with list.html '''
+        response = self.client.get('/lists/only-list-in-world/')
+        self.assertTemplateUsed(response, 'list.html')
+
     def test_displays_all_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
