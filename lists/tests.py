@@ -53,7 +53,7 @@ class HomePageTest(TestCase):
 
         # 302 represents a Http redirect
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/only-list-in-world/')
 
     def test_home_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
@@ -93,3 +93,20 @@ class ItemModelTest(TestCase):
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item.text, 'Item the second')
         
+
+class ListViewTest(TestCase):
+    ''' Django Test Client for testing views, templates, and URLs
+    working together; i.e checking URL resolution explicitly, view
+    functions, and views rendering templates correctly. '''
+    def test_displays_all_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        # instead of calling view function directly, we
+        # use Django test client (.client part of TestCase)
+        response = self.client.get('/lists/only-list-in-world/')
+
+        # assertContains, as opposed to assertEquals, can deal
+        # with rasponses and bytes of their content.
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
