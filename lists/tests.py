@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 
 from lists.views import home_page  # home_page in lists/view.py
-from lists.models import Item
+from lists.models import Item, List
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -30,17 +30,25 @@ class HomePageTest(TestCase):
         self.assertEqual(response.content.decode(), expected_html)
 
 
-class ItemModelTest(TestCase):
+class ListAndItemModelsTest(TestCase):
     ''' new test model to create new records in database, and first
     unit test for using Django's Object-Relational Mapper (ORM). '''
     def test_saving_and_retrieving_items(self):
+        list_ = List()
+        list_.save()
+
         first_item = Item()
         first_item.text = 'The first (ever) list item'
+        first_item.list = list_
         first_item.save()
 
         second_item = Item()
         second_item.text = 'Item the second'
+        second_item.list = list_
         second_item.save()
+        
+        saved_list = List.objects.first()
+        self.assertEqual(saved_list, list_)
 
         # .objects is a class attribute of the database
         # .all() is a simple query to retrieve all records for table
@@ -50,7 +58,9 @@ class ItemModelTest(TestCase):
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
+        self.assertEqual(first_saved_item.list, list_)
         self.assertEqual(second_saved_item.text, 'Item the second')
+        self.assertEqual(second_saved_item.list, list_)
         
 
 class ListViewTest(TestCase):
@@ -64,8 +74,9 @@ class ListViewTest(TestCase):
         self.assertTemplateUsed(response, 'list.html')
 
     def test_displays_all_items(self):
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
+        list_ = List.objects.create()
+        Item.objects.create(text='itemey 1', list=list_)
+        Item.objects.create(text='itemey 2', list=list_)
 
         # instead of calling view function directly, we
         # use Django test client (.client part of TestCase)
