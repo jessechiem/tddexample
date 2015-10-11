@@ -13,12 +13,17 @@ def home_page(request):
     # reference: look up dict.get
     # http://docs.python.org/3/library/stdtypes.html#dict.get
 
-def view_list(request):
+def view_list(request, list_id):
     ''' dummy view function for testing ListViewTest. '''
-    items = Item.objects.all()
-    return render(request, 'list.html', {'items': items})
+    list_ = List.objects.get(id=list_id)
+    return render(request, 'list.html', {'list': list_})
 
 def new_list(request):
     list_ = List.objects.create()
     Item.objects.create(text=request.POST['item_text'], list=list_)
-    return redirect('/lists/only-list-in-world/')
+    return redirect('/lists/%d/' % (list_.id,))
+
+def add_item(request, list_id):
+    list_ = List.objects.get(id=list_id)
+    Item.objects.create(text=request.POST['item_text'], list=list_)
+    return redirect('/lists/%d/' % (list_.id,))
