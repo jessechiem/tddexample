@@ -29,37 +29,6 @@ class HomePageTest(TestCase):
         # allows us to compare strings with strings
         self.assertEqual(response.content.decode(), expected_html)
 
-    def test_home_page_can_save_a_POST_request(self):
-        ''' Checks that return HTML will have new item next to it,
-        along with POST request. Always redirect after a post. '''
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = home_page(request)
-
-        # check that at least 1 Item saved to database
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()  # same as objects.all()[0]
-        self.assertEqual(new_item.text, 'A new list item')
-
-    def test_home_page_redirects_after_POST(self):
-        ''' separate unit test for checking redirect post. '''
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-        
-        response = home_page(request)
-
-        # 302 represents a Http redirect
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/only-list-in-world/')
-
-    def test_home_page_only_saves_items_when_necessary(self):
-        request = HttpRequest()
-        home_page(request)
-        self.assertEqual(Item.objects.count(), 0)
-
 
 class ItemModelTest(TestCase):
     ''' new test model to create new records in database, and first
@@ -106,3 +75,28 @@ class ListViewTest(TestCase):
         # with rasponses and bytes of their content.
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
+
+class NewListTest(TestCase):
+    ''' Test class for new list creation. '''
+
+    def test_saving_a_POST_request(self):
+        ''' Checks that return HTML will have new item next to it,
+        along with POST request. Always redirect after a post. '''
+        self.client.post(
+            '/lists/new',
+            data={'item_text': 'A new list item'}
+        )
+        # check that at least 1 Item saved to database
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()  # same as objects.all()[0]
+        self.assertEqual(new_item.text, 'A new list item')
+
+    def test_redirects_after_POST(self):
+        ''' separate unit test for checking redirect post. '''
+        response = self.client.post(
+            '/lists/new',
+            data={'item_text': 'A new list item'}
+        )
+        # instead of assertEquals, we'll use another of Django test
+        # client's helper functions instead
+        self.assertRedirects(response, '/lists/only-list-in-world/')

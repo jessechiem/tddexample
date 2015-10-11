@@ -6,9 +6,8 @@ from lists.models import Item
 def home_page(request):
     ''' render takes the request as first parameter and
     name of the template to render.'''
-    if request.method == 'POST':
-        Item.objects.create(text=request.POST['item_text'])
-        return redirect('/lists/only-list-in-world/')
+    # we can now remove the previous 'if request.method == 'POST''
+    # code, since our new views will be doing that bulk of the work
     return render(request, 'home.html')
         
     # reference: look up dict.get
@@ -18,3 +17,7 @@ def view_list(request):
     ''' dummy view function for testing ListViewTest. '''
     items = Item.objects.all()
     return render(request, 'list.html', {'items': items})
+
+def new_list(request):
+    Item.objects.create(text=request.POST['item_text'])
+    return redirect('/lists/only-list-in-world/')
