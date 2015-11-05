@@ -1,9 +1,10 @@
-from django.test import LiveServerTestCase
+# note: book has "StaticLiveServerCase", but was renamed after release
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys  # send special keys (ex. ENTER, CTRL modifiers)
 import unittest
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         ''' special method run before test. '''
