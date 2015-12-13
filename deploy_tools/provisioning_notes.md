@@ -25,7 +25,7 @@ e.g.,, on Ubuntu:
 * replace SITENAME with, e.g., staging.my-domain.com
 
 ## Folder structure:
-Assumer we have a user account at /home/username
+Assume we have a user account at /home/username
 
 /home/username
 |___ sites
