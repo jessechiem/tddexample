@@ -34,7 +34,7 @@ def _create_directory_structure_if_necessary(site_folder):
 def _get_latest_source(source_folder):
     """ pull down our source code """
     if exists(source_folder + '/.git'):
-        run('cd %s && git featch' % (source_folder,))
+        run('cd %s && git fetch' % (source_folder,))
     else:
         # alternatively, we use git clone with the
         # repo URL to bring down a fresh source tree
