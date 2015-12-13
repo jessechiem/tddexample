@@ -8,6 +8,9 @@ that you want to run on servers.
 
 usually how to run:
 fab function_name,host=SERVER_ADDRESS
+
+specifically (from above):
+fab deploy:host=gob@staging.mangojollyjolly.xyz
 """
 
 REPO_URL = 'http://github.com/jessechiem/tddexample.git'
